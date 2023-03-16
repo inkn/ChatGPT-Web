@@ -16,6 +16,7 @@ export default defineConfig((env) => {
       vue(),
       VitePWA({
         injectRegister: 'auto',
+        registerType: 'autoUpdate',
         manifest: {
           name: 'chatGPT',
           short_name: 'chatGPT',

@@ -506,7 +506,7 @@ onUnmounted(() => {
     <footer :class="footerClass">
       <div class="w-full max-w-screen-xl m-auto">
         <div class="flex items-center justify-between space-x-2">
-          <HoverButton @click="handleClear">
+          <HoverButton @click="handleClear" tooltip="清空聊天">
             <span class="text-xl text-[#4f555e] dark:text-white">
               <SvgIcon icon="ri:delete-bin-line" />
             </span>

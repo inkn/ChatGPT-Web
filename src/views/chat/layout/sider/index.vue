@@ -79,7 +79,7 @@ watch(
         </div>
         <div class="p-4">
           <NButton block @click="show = true">
-            设置模板
+            配置模板
           </NButton>
         </div>
       </main>

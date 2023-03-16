@@ -5,6 +5,10 @@ import { SvgIcon } from '@/components/common'
 import { useAppStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 
+const vFocus = {
+  mounted: (el: HTMLElement) => (el.children[0].children[0].children[0] as HTMLElement).focus()
+}
+
 const { isMobile } = useBasicLayout()
 
 const appStore = useAppStore()
@@ -34,10 +38,12 @@ function handleDelete(index: number, event?: MouseEvent | TouchEvent) {
   chatStore.deleteHistory(index)
 }
 
-function handleEnter({ uuid }: Chat.History, isEdit: boolean, event: KeyboardEvent) {
+function handleEnter(chart: Chat.History, isEdit: boolean, event: KeyboardEvent) {
   event?.stopPropagation()
   if (event.key === 'Enter')
-    chatStore.updateHistory(uuid, { isEdit })
+    chatStore.updateHistory(chart.uuid, { isEdit })
+  if (event.key === 'Escape')
+    chart.isEdit = false
 }
 
 function isActive(uuid: number) {
@@ -56,21 +62,15 @@ function isActive(uuid: number) {
       </template>
       <template v-else>
         <div v-for="(item, index) of dataSources" :key="index">
-          <a
-            class="relative flex items-center gap-3 px-3 py-3 break-all border rounded-md cursor-pointer hover:bg-neutral-100 group dark:border-neutral-800 dark:hover:bg-[#24272e]"
+          <a class="relative flex items-center gap-3 px-3 py-3 break-all border rounded-md cursor-pointer hover:bg-neutral-100 group dark:border-neutral-800 dark:hover:bg-[#24272e]"
             :class="isActive(item.uuid) && ['border-[#4b9e5f]', 'bg-neutral-100', 'text-[#4b9e5f]', 'dark:bg-[#24272e]', 'dark:border-[#4b9e5f]', 'pr-14']"
-            @click="handleSelect(item)"
-          >
+            @click="handleSelect(item)">
             <span>
               <SvgIcon icon="ri:message-3-line" />
             </span>
             <div class="relative flex-1 overflow-hidden break-all text-ellipsis whitespace-nowrap">
-              <NInput
-                v-if="item.isEdit"
-                v-model:value="item.title"
-                size="tiny"
-                @keypress="handleEnter(item, false, $event)"
-              />
+              <NInput v-focus v-if="item.isEdit" v-model:value="item.title" size="tiny"
+                @keydown="handleEnter(item, false, $event)" @blur="item.isEdit = false" />
               <span v-else>{{ item.title }}</span>
             </div>
             <div v-if="isActive(item.uuid)" class="absolute z-10 flex visible right-1">

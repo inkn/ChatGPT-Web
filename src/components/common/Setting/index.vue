@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { NModal } from 'naive-ui'
 import General from './General.vue'
 

@@ -112,7 +112,7 @@ const addPromptTemplate = () => {
   }
   promptList.value.unshift({ key: tempPromptKey.value, value: tempPromptValue.value } as never)
   message.success(t('common.addSuccess'))
-  changeShowModal('')
+  // changeShowModal('')
 }
 
 const modifyPromptTemplate = () => {
@@ -141,7 +141,7 @@ const modifyPromptTemplate = () => {
 
   promptList.value = [{ key: tempPromptKey.value, value: tempPromptValue.value }, ...tempList] as never
   message.success(t('common.editSuccess'))
-  changeShowModal('')
+  // changeShowModal('')
 }
 
 const deletePromptTemplate = (row: { key: string; value: string }) => {
@@ -196,12 +196,12 @@ const importPromptTemplate = () => {
         promptList.value.unshift({ key: i[key], value: i[value] } as never)
     }
     message.success(t('common.importSuccess'))
-    changeShowModal('')
+    // changeShowModal('')
   }
   catch(err){
     console.error(err);
     message.error('JSON 格式错误，请检查 JSON 格式')
-    changeShowModal('')
+    // changeShowModal('')
   }
 }
 

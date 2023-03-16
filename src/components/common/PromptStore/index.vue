@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import type { DataTableColumns } from 'naive-ui'
-import { computed, h, ref, watch } from 'vue'
+import { computed, h, ref, watch, onMounted } from 'vue'
 import { NButton, NCard, NDataTable, NDivider, NInput, NLayoutContent, NMessageProvider, NModal, NPopconfirm, NSpace, NTabPane, NTabs, useMessage } from 'naive-ui'
 import PromptRecommend from '../../../assets/recommend.json'
 import { SvgIcon } from '..'
@@ -50,6 +50,8 @@ const promptStore = usePromptStore()
 const promptRecommendList = PromptRecommend
 const promptList = ref<any>(promptStore.promptList)
 
+
+
 // 用于添加修改的临时prompt参数
 const tempPromptKey = ref('')
 const tempPromptValue = ref('')
@@ -80,11 +82,18 @@ const changeShowModal = (mode: string, selected = { key: '', value: '' }) => {
 }
 
 // 在线导入相关
-const downloadURL = ref('')
+const downloadURL = ref(promptRecommendList[1].downloadUrl)
 const downloadDisabled = computed(() => downloadURL.value.trim().length < 1)
 const setDownloadURL = (url: string) => {
   downloadURL.value = url
 }
+
+onMounted(() => {
+  // 没有模板就自动导入
+  if (!promptList.value?.length) {
+    downloadPromptTemplate()
+  }
+})
 
 // 控制 input 按钮
 const inputStatus = computed (() => tempPromptKey.value.trim().length < 1 || tempPromptValue.value.trim().length < 1)
@@ -168,17 +177,17 @@ const importPromptTemplate = () => {
     }
 
     for (const i of jsonData) {
-      if (!('key' in i) || !('value' in i))
+      if (!(key in i) || !(value in i))
         throw new Error(t('store.importError'))
       let safe = true
       for (const j of promptList.value) {
         if (j.key === i[key]) {
-          message.warning(t('store.importRepeatTitle', { msg: i[key] }))
+          // message.warning(t('store.importRepeatTitle', { msg: i[key] }))
           safe = false
           break
         }
         if (j.value === i[value]) {
-          message.warning(t('store.importRepeatContent', { msg: i[key] }))
+          // message.warning(t('store.importRepeatContent', { msg: i[key] }))
           safe = false
           break
         }
@@ -189,7 +198,8 @@ const importPromptTemplate = () => {
     message.success(t('common.importSuccess'))
     changeShowModal('')
   }
-  catch {
+  catch(err){
+    console.error(err);
     message.error('JSON 格式错误，请检查 JSON 格式')
     changeShowModal('')
   }
@@ -229,6 +239,7 @@ const downloadPromptTemplate = async () => {
     importLoading.value = false
   }
 }
+
 
 // 移动端自适应相关
 const renderTemplate = () => {

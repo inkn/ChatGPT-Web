@@ -79,7 +79,7 @@ watch(
         </div>
         <div class="p-4">
           <NButton block @click="show = true">
-            Prompt Store
+            设置模板
           </NButton>
         </div>
       </main>

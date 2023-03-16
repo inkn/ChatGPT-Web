@@ -4,6 +4,9 @@ import { setupI18n } from './locales'
 import { setupAssets } from './plugins'
 import { setupStore } from './store'
 import { setupRouter } from './router'
+import { registerSW } from 'virtual:pwa-register'
+
+registerSW({ immediate: true })
 
 async function bootstrap() {
   const app = createApp(App)

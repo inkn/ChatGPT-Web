@@ -535,6 +535,7 @@ onUnmounted(() => {
               />
             </template>
           </NAutoComplete>
+          <NTooltip title="发送" trigger="hover">
           <NButton type="primary" :disabled="buttonDisabled" @click="handleSubmit">
             <template #icon>
               <span class="dark:text-black">
@@ -542,6 +543,7 @@ onUnmounted(() => {
               </span>
             </template>
           </NButton>
+        </NTooltip>
         </div>
       </div>
     </footer>
